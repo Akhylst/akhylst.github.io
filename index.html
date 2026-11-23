@@ -31,7 +31,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { margin: 0; min-height: 100vh; overflow-x: hidden; color: var(--murekkep); font: 400 16px/1.5 var(--f); -webkit-font-smoothing: antialiased;
-  -webkit-tap-highlight-color: transparent; background: radial-gradient(110% 55% at 50% -10%, var(--mor-y), transparent 70%), var(--zemin); background-color: var(--zemin); }
+  -webkit-tap-highlight-color: transparent; background-color: var(--zemin);
+  /* hafif sticker deseni: pati, nota, terazi, kalp */
+  background: radial-gradient(110% 55% at 50% -10%, var(--mor-y), transparent 70%), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='%23e8467b' fill-opacity='.08'%3E%3Cg transform='rotate(-16 40 46)'%3E%3Cellipse cx='40' cy='52' rx='10' ry='8.5'/%3E%3Ccircle cx='28' cy='39' r='4.5'/%3E%3Ccircle cx='36' cy='33' r='4.5'/%3E%3Ccircle cx='45' cy='33' r='4.5'/%3E%3Ccircle cx='52' cy='40' r='4.5'/%3E%3C/g%3E%3Cpath d='M168 172c-6-6-16-9-16-18a8 8 0 0 1 16-3a8 8 0 0 1 16 3c0 9-10 12-16 18z'/%3E%3C/g%3E%3Cg fill='%236d4fe6' fill-opacity='.09'%3E%3Ccircle cx='150' cy='66' r='7'/%3E%3Crect x='155' y='30' width='3' height='37'/%3E%3Cpath d='M158 30c8 3 12 9 10 17c-2-5-6-8-10-8z'/%3E%3C/g%3E%3Cg fill='none' stroke='%23b5842a' stroke-opacity='.13' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M60 140v34M48 176h24M42 146h36M42 146l-6 13M42 146l6 13M78 146l-6 13M78 146l6 13'/%3E%3Cpath d='M34 159a8 5 0 0 0 16 0M70 159a8 5 0 0 0 16 0'/%3E%3C/g%3E%3C/svg%3E"), var(--zemin); }
 .sayfa { max-width: 560px; margin: 0 auto; display: grid; gap: 16px;
   padding: max(24px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(32px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
 header { position: relative; display: flex; align-items: center; gap: 12px; padding: 8px 0; }
@@ -49,6 +51,19 @@ h1 small { display: block; margin-top: 5px; font: 500 .8rem/1.2 var(--f); color:
 .cipler li { padding: 3px 10px; border-radius: 999px; background: var(--kart-2); font-size: .78rem; font-weight: 700; }
 .cipler li.davet { background: var(--vurgu-y); color: var(--vurgu); }
 .ok { font: 800 1.4rem var(--fb); color: var(--vurgu); }
+/* Albüm ilerlemesi: yazı + dolan çubuk */
+.ilerleme { display: grid; gap: 4px; margin-top: 10px; font-size: .78rem; font-weight: 700; color: var(--soluk); }
+.ilerleme b { color: var(--murekkep); font-variant-numeric: tabular-nums; }
+.cubuk { height: 8px; border-radius: 99px; background: var(--kart-2); overflow: hidden; }
+.cubuk i { display: block; height: 100%; min-width: 6px; border-radius: inherit; background: linear-gradient(90deg, var(--vurgu), var(--mor)); }
+/* Bugün: duruma göre en çok iki davet; dokununca oyun o modda açılır */
+.bugun { position: relative; display: grid; gap: 8px; padding: 14px 16px; border-radius: 20px; background: linear-gradient(135deg, var(--vurgu-y), var(--mor-y)); }
+.bugun h2 { margin: 0; font: 800 .8rem/1 var(--fb); letter-spacing: .08em; text-transform: uppercase; color: var(--vurgu); }
+.davet { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: var(--kart); color: var(--murekkep); text-decoration: none;
+  font-weight: 600; font-size: .92rem; box-shadow: var(--golge); }
+.davet span:first-child { font-size: 1.25rem; }
+.davet .ok { margin-left: auto; font-size: 1.1rem; }
+.davet.bitti { background: none; box-shadow: none; padding: 2px 4px; color: var(--soluk); font-size: .85rem; }
 .kur { padding: 14px 16px; border-radius: 18px; background: var(--kart); border: 1px dashed var(--cizgi); font-size: .86rem; color: var(--soluk); display: grid; gap: 10px; }
 .kur b { color: var(--murekkep); }
 .kur p { margin: 0; }
@@ -67,15 +82,21 @@ button { font: 700 1rem var(--f); border: 0; border-radius: 14px; min-height: 48
     <span class="st" aria-hidden="true" style="--b:1.6rem;--r:14deg;top:-6px;right:6px">🐾</span>
   </header>
 
+  <section class="bugun" id="bugun" hidden>
+    <h2>Bugün</h2>
+    <div id="davetler" style="display:grid;gap:8px"></div>
+    <span class="st" aria-hidden="true" style="--b:1.5rem;--r:12deg;top:-12px;right:14px">🌸</span>
+  </section>
+
   <a class="oyun" href="/ilk-notada/">
     <img src="/ilk-notada/ikon-192.png" alt="" width="72" height="72">
-    <div><h2>İlk Notada</h2><p>Şarkıyı ilk notadan bil · Dinle, Sözsüz, Söz, Hız</p><ul class="cipler" id="inCip"></ul></div>
+    <div><h2>İlk Notada</h2><p>Şarkıyı ilk notadan bil · Dinle, Sözsüz, Söz, Hız</p><ul class="cipler" id="inCip"></ul><div class="ilerleme" id="inAlbum" hidden></div></div>
     <span class="ok" aria-hidden="true">→</span>
     <span class="st" aria-hidden="true" style="--b:1.7rem;--r:12deg;top:-14px;right:-8px">🎧</span>
   </a>
   <a class="oyun" href="/hayvan-terazisi/">
     <img src="/hayvan-terazisi/ikon-192.png" alt="" width="72" height="72">
-    <div><h2>Hayvan Terazisi</h2><p>Kaç tanesi dengeler? · Sırala, Günün turu, Karşılıklı</p><ul class="cipler" id="htCip"></ul></div>
+    <div><h2>Hayvan Terazisi</h2><p>Kaç tanesi dengeler? · Sırala, Günün turu, Karşılıklı</p><ul class="cipler" id="htCip"></ul><div class="ilerleme" id="htAlbum" hidden></div></div>
     <span class="ok" aria-hidden="true">→</span>
     <span class="st" aria-hidden="true" style="--b:1.7rem;--r:-12deg;bottom:-14px;left:-8px">🐱</span>
   </a>
@@ -92,18 +113,33 @@ const $ = id => document.getElementById(id);
 const oku = k => { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } };
 const cipler = (id, L) => { $(id).innerHTML = L.map(([s, m]) => `<li${s ? ` class="${s}"` : ""}>${m}</li>`).join(""); };
 const SAYI = new Intl.NumberFormat("tr-TR");
-{
-  const sk = ["in-skor", "in-skor-sozsuz", "in-skor-soz"].flatMap(k => [oku(k), oku(k + "-zor")]).filter(Boolean);
-  const puan = sk.reduce((t, x) => t + (+x.puan || 0), 0), album = Object.keys(oku("in-album") || {}).length;
-  const hiz = Math.max(+(oku("in-skor-hiz") || {}).puan || 0, +(oku("in-skor-hiz-zor") || {}).puan || 0);
-  cipler("inCip", puan || album || hiz ? [["", `⭐ ${SAYI.format(puan)} puan`], ...(album ? [["", `🗂 ${album} sticker`]] : []), ...(hiz ? [["", `⏱ rekor ${hiz}`]] : [])]
-    : [["davet", "Henüz oynamadın 🎶"]]);
+// Albüm çubuğu: toplanan / toplam (toplamı oyun her açılışta yazar: in-toplam, ht-toplam); oyun hiç açılmadıysa gizli
+function ilerleme(id, ad, n, toplam) {
+  if (!toplam) return;
+  $(id).hidden = false;
+  $(id).innerHTML = `<span>${ad} <b>${n}/${toplam}</b></span><span class="cubuk" role="progressbar" aria-valuemin="0" aria-valuemax="${toplam}" aria-valuenow="${n}"><i style="width:${(100 * n / toplam).toFixed(1)}%"></i></span>`;
 }
+const sk = ["in-skor", "in-skor-sozsuz", "in-skor-soz"].flatMap(k => [oku(k), oku(k + "-zor")]).filter(Boolean);
+const puan = sk.reduce((t, x) => t + (+x.puan || 0), 0), inAlbum = Object.keys(oku("in-album") || {}).length;
+const hiz = Math.max(+(oku("in-skor-hiz") || {}).puan || 0, +(oku("in-skor-hiz-zor") || {}).puan || 0);
+cipler("inCip", puan || inAlbum || hiz ? [["", `⭐ ${SAYI.format(puan)} puan`], ...(hiz ? [["", `⏱ rekor ${hiz}`]] : [])] : [["davet", "Henüz oynamadın 🎶"]]);
+ilerleme("inAlbum", "🗂 Sticker albümü", inAlbum, +oku("in-toplam") || 0);
+const r = oku("ht-rekor") || {}, g = oku("ht-gun"), bugun = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10);  // Türkiye tarihi, oyunla aynı
+const gunBitti = g && g.tarih === bugun && Array.isArray(g.s) && g.s.length >= 5, gunPuan = gunBitti ? g.s.reduce((t, x) => t + (+x[1] || 0), 0) : 0;
+cipler("htCip", [...(r.tur ? [["", `⚖️ ${SAYI.format(r.tur)} tur`]] : []), ...(r.tam ? [["", `🎯 ${SAYI.format(r.tam)} tam isabet`]] : []),
+  gunBitti ? ["", "📅 Günün turu ✓"] : ["davet", "📅 Günün turu seni bekliyor"]]);
+ilerleme("htAlbum", "📚 Hayvan albümü", Object.keys(oku("ht-album") || {}).length, +oku("ht-toplam") || 0);
+// Bugün: en çok iki davet (günün turu > Hız rekoru > albüm); dokununca oyunun modu ayarlanır (ht-mod düz yazı, in-mod JSON), sonra açılır
 {
-  const r = oku("ht-rekor") || {}, g = oku("ht-gun"), bugun = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10);  // Türkiye tarihi, oyunla aynı
-  const gunBitti = g && g.tarih === bugun && Array.isArray(g.s) && g.s.length >= 5;
-  cipler("htCip", [...(r.tur ? [["", `⚖️ ${SAYI.format(r.tur)} tur`]] : []), ...(r.tam ? [["", `🎯 ${SAYI.format(r.tam)} tam isabet`]] : []),
-    gunBitti ? ["", "📅 Günün turu ✓"] : ["davet", "📅 Günün turu seni bekliyor"]]);
+  const L = [];
+  if (!gunBitti) L.push(["📅", "Hayvan Terazisi'nde günün turu seni bekliyor", "/hayvan-terazisi/", "ht-mod", "gun"]);
+  L.push(hiz ? ["⏱", `Hız rekorun ${hiz} — kırabilir misin?`, "/ilk-notada/", "in-mod", '"hiz"'] : ["⏱", "60 saniyede kaç şarkı bilirsin? Hız'ı dene", "/ilk-notada/", "in-mod", '"hiz"']);
+  const toplam = +oku("in-toplam") || 0;
+  if (toplam && inAlbum < toplam) L.push(["🗂", `Albümünde ${toplam - inAlbum} boş yer var`, "/ilk-notada/", "", ""]);
+  $("davetler").innerHTML = L.slice(0, 2).map(([e, y, h, k, v]) => `<a class="davet" href="${h}" data-k="${k}" data-v='${v}'><span>${e}</span><span>${y}</span><span class="ok">→</span></a>`).join("")
+    + (gunBitti ? `<p class="davet bitti">📅 Günün turu bitti: ${gunPuan}/500 ✓</p>` : "");
+  $("bugun").hidden = false;
+  $("davetler").addEventListener("click", e => { const a = e.target.closest("a[data-k]"); if (a?.dataset.k) try { localStorage.setItem(a.dataset.k, a.dataset.v); } catch (x) {} });
 }
 // Android/Chrome: tarayıcı izin verince "Ana ekrana ekle" düğmesi; zaten uygulama olarak açıksa kutu gizli
 let istem = null;
