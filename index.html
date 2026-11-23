@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bizim Oyunlar</title>
+<meta name="description" content="İlk Notada ve Hayvan Terazisi tek yerde">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="ikon-180.png">
+<link rel="icon" href="ikon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bizim Oyunlar">
+<meta name="theme-color" content="#f6f3fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f0c15" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Giriş: iki oyun kartı (simge, ad, kısa tanım, bu telefondaki puanlar), ana ekrana ekleme. İlk Notada'nın pembe/lila tonları ve sticker'ları */
+:root {
+  --zemin: #f6f3fb; --kart: #ffffff; --kart-2: #f2eef8; --cizgi: #e2dbee; --murekkep: #1b1626; --soluk: #696277;
+  --vurgu: #e8467b; --vurgu-y: #fde3ec; --mor: #6d4fe6; --mor-y: #e9e3ff; --ana: #1b1626; --ana-metin: #ffffff;
+  --golge: 0 1px 2px rgba(27, 22, 38, .06), 0 12px 30px -14px rgba(27, 22, 38, .32);
+  --f: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --fb: "Unbounded", "Inter", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --zemin: #0f0c15; --kart: #18131f; --kart-2: #201a29; --cizgi: #2e2639; --murekkep: #f2eef8; --soluk: #a69db4;
+    --vurgu: #ff7ca4; --vurgu-y: #3a1b29; --mor: #a68fff; --mor-y: #2a2145; --ana: #ff7ca4; --ana-metin: #1c0f16;
+    --golge: 0 1px 2px rgba(0, 0, 0, .4), 0 12px 30px -14px rgba(0, 0, 0, .85); color-scheme: dark; }
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; min-height: 100vh; overflow-x: hidden; color: var(--murekkep); font: 400 16px/1.5 var(--f); -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent; background: radial-gradient(110% 55% at 50% -10%, var(--mor-y), transparent 70%), var(--zemin); background-color: var(--zemin); }
+.sayfa { max-width: 560px; margin: 0 auto; display: grid; gap: 16px;
+  padding: max(24px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(32px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+header { position: relative; display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+header img { width: 52px; height: 52px; border-radius: 16px; box-shadow: var(--golge); }
+h1 { margin: 0; font: 800 1.55rem/1.05 var(--fb); letter-spacing: -.02em; }
+h1 small { display: block; margin-top: 5px; font: 500 .8rem/1.2 var(--f); color: var(--soluk); letter-spacing: .02em; }
+.oyun { position: relative; display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 16px; border-radius: 24px;
+  background: var(--kart); border: 1px solid var(--cizgi); box-shadow: var(--golge); color: inherit; text-decoration: none; transition: transform .15s; }
+.oyun:active { transform: scale(.98); }
+.oyun:focus-visible, button:focus-visible { outline: 2px solid var(--vurgu); outline-offset: 3px; }
+.oyun img { width: 72px; height: 72px; border-radius: 20px; }
+.oyun h2 { margin: 0; font: 800 1.15rem/1.2 var(--fb); letter-spacing: -.01em; }
+.oyun p { margin: 3px 0 0; font-size: .88rem; color: var(--soluk); }
+.cipler { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; padding: 0; list-style: none; }
+.cipler li { padding: 3px 10px; border-radius: 999px; background: var(--kart-2); font-size: .78rem; font-weight: 700; }
+.cipler li.davet { background: var(--vurgu-y); color: var(--vurgu); }
+.ok { font: 800 1.4rem var(--fb); color: var(--vurgu); }
+.kur { padding: 14px 16px; border-radius: 18px; background: var(--kart); border: 1px dashed var(--cizgi); font-size: .86rem; color: var(--soluk); display: grid; gap: 10px; }
+.kur b { color: var(--murekkep); }
+.kur p { margin: 0; }
+button { font: 700 1rem var(--f); border: 0; border-radius: 14px; min-height: 48px; padding: 0 18px; cursor: pointer; background: var(--ana); color: var(--ana-metin); }
+/* Sticker: emoji, beyaz kesim kenarı + gölge, eğik; dokunuşu engellemez */
+.st { position: absolute; z-index: 2; pointer-events: none; user-select: none; line-height: 1; font-size: var(--b, 1.8rem); rotate: var(--r, -8deg);
+  filter: drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff) drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff) drop-shadow(0 5px 6px rgba(40, 20, 60, .3)); }
+@media (prefers-reduced-motion: reduce) { .oyun { transition: none; } }
+</style>
+</head>
+<body>
+<div class="sayfa">
+  <header>
+    <img src="ikon-192.png" alt="" width="52" height="52">
+    <h1>Bizim Oyunlar<small>Hangisini oynayalım? 💖</small></h1>
+    <span class="st" aria-hidden="true" style="--b:1.6rem;--r:14deg;top:-6px;right:6px">🐾</span>
+  </header>
+
+  <a class="oyun" href="/ilk-notada/">
+    <img src="/ilk-notada/ikon-192.png" alt="" width="72" height="72">
+    <div><h2>İlk Notada</h2><p>Şarkıyı ilk notadan bil · Dinle, Sözsüz, Söz, Hız</p><ul class="cipler" id="inCip"></ul></div>
+    <span class="ok" aria-hidden="true">→</span>
+    <span class="st" aria-hidden="true" style="--b:1.7rem;--r:12deg;top:-14px;right:-8px">🎧</span>
+  </a>
+  <a class="oyun" href="/hayvan-terazisi/">
+    <img src="/hayvan-terazisi/ikon-192.png" alt="" width="72" height="72">
+    <div><h2>Hayvan Terazisi</h2><p>Kaç tanesi dengeler? · Sırala, Günün turu, Karşılıklı</p><ul class="cipler" id="htCip"></ul></div>
+    <span class="ok" aria-hidden="true">→</span>
+    <span class="st" aria-hidden="true" style="--b:1.7rem;--r:-12deg;bottom:-14px;left:-8px">🐱</span>
+  </a>
+
+  <section class="kur" id="kur">
+    <button type="button" id="kurDug" hidden>📲 Ana ekrana ekle</button>
+    <p><b>Ana ekrana ekle:</b> iPhone'da Safari'de Paylaş ⬆ → "Ana Ekrana Ekle"; Android'de Chrome'da ⋮ → "Ana ekrana ekle". Uygulama gibi açılır, internet yokken de açılır (şarkı çalan modlar ve karşılıklı oyun internet ister).</p>
+  </section>
+</div>
+
+<script>
+// Puanlar bu telefonun tarayıcısından okunur (oyunlarla aynı adres: akhylst.github.io); hiçbir yere gönderilmez
+const $ = id => document.getElementById(id);
+const oku = k => { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } };
+const cipler = (id, L) => { $(id).innerHTML = L.map(([s, m]) => `<li${s ? ` class="${s}"` : ""}>${m}</li>`).join(""); };
+const SAYI = new Intl.NumberFormat("tr-TR");
+{
+  const sk = ["in-skor", "in-skor-sozsuz", "in-skor-soz"].flatMap(k => [oku(k), oku(k + "-zor")]).filter(Boolean);
+  const puan = sk.reduce((t, x) => t + (+x.puan || 0), 0), album = Object.keys(oku("in-album") || {}).length;
+  const hiz = Math.max(+(oku("in-skor-hiz") || {}).puan || 0, +(oku("in-skor-hiz-zor") || {}).puan || 0);
+  cipler("inCip", puan || album || hiz ? [["", `⭐ ${SAYI.format(puan)} puan`], ...(album ? [["", `🗂 ${album} sticker`]] : []), ...(hiz ? [["", `⏱ rekor ${hiz}`]] : [])]
+    : [["davet", "Henüz oynamadın 🎶"]]);
+}
+{
+  const r = oku("ht-rekor") || {}, g = oku("ht-gun"), bugun = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10);  // Türkiye tarihi, oyunla aynı
+  const gunBitti = g && g.tarih === bugun && Array.isArray(g.s) && g.s.length >= 5;
+  cipler("htCip", [...(r.tur ? [["", `⚖️ ${SAYI.format(r.tur)} tur`]] : []), ...(r.tam ? [["", `🎯 ${SAYI.format(r.tam)} tam isabet`]] : []),
+    gunBitti ? ["", "📅 Günün turu ✓"] : ["davet", "📅 Günün turu seni bekliyor"]]);
+}
+// Android/Chrome: tarayıcı izin verince "Ana ekrana ekle" düğmesi; zaten uygulama olarak açıksa kutu gizli
+let istem = null;
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); istem = e; $("kurDug").hidden = false; });
+$("kurDug").addEventListener("click", async () => { if (!istem) return; istem.prompt(); await istem.userChoice.catch(() => {}); istem = null; $("kurDug").hidden = true; });
+if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) $("kur").hidden = true;
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body>
+</html>

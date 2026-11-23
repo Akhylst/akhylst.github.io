@@ -1,0 +1,16 @@
+{
+  "name": "Bizim Oyunlar",
+  "short_name": "Oyunlar",
+  "description": "İlk Notada ve Hayvan Terazisi tek yerde",
+  "lang": "tr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f3fb",
+  "theme_color": "#f6f3fb",
+  "icons": [
+    { "src": "ikon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "ikon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "ikon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
